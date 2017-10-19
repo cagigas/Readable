@@ -1,0 +1,70 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.card{
+	margin-top: 20px
+}
+.badge-secondary{
+	    float: right;
+}
+.badge {
+    font-size: 100%;
+}
+.material-icons {
+    font-size: 19px;
+}
+.space-up{
+	margin-top: 20px;
+}
+.dropdown{
+	margin-top: 20px;
+
+}
+.btn-block{
+		margin-top: 20px;
+
+}
+h4{
+	cursor: pointer;
+	
+}
+.card-link{
+	cursor: pointer;
+	
+}
+.material-icons{
+	cursor: pointer;
+	
+}
+.comment{
+    border-style: solid;
+    border-right: #000000;
+    border-left: #000000;
+    border-top: #000000;
+}
