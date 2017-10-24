@@ -37,9 +37,13 @@ when editing, existing data should be populated in the form
 
 
 ## Getting Started
-```
-git clone 'https://github.com/cagigas/Readable'
-cd Readable
-npm install
-npm start
-```
+`git clone 'https://github.com/cagigas/Readable'`
+# Server
+`cd api-server`
+`npm install`
+`npm start`
+# Client
+`cd api-client`
+`npm install`
+`npm start`
+
