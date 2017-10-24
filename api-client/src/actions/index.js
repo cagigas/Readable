@@ -1,19 +1,6 @@
 import axios from 'axios';
-
-export const FETCH_CATEGORIES = 'FETCH_CATEGORIES'
-export const FETCH_POSTS = 'FETCH_POSTS'
-export const FETCH_POST = 'FETCH_POST'
-export const CREATE_POST = 'CREATE_POST'
-export const EDIT_POST = 'EDIT_POST'
-export const DELETE_POST = 'DELETE_POST'
-export const VOTE_POST = 'VOTE_POST'
-
-export const FETCH_COMMENTS = 'FETCH_COMMENTS'
-export const VOTE_COMMENT = 'VOTE_COMMENT'
-export const FETCH_COMMENT = 'FETCH_COMMENT'
-export const CREATE_COMMENT = 'CREATE_COMMENT'
-export const DELETE_COMMENT = 'DELETE_COMMENT'
-export const EDIT_COMMENT = 'EDIT_COMMENT'
+import { FETCH_CATEGORIES, FETCH_POSTS, FETCH_POST, CREATE_POST, EDIT_POST, DELETE_POST, VOTE_POST, 
+	FETCH_COMMENTS, FETCH_NCOMMENTS, VOTE_COMMENT, FETCH_COMMENT, CREATE_COMMENT, DELETE_COMMENT, EDIT_COMMENT } from '../actions/type'
 
 axios.defaults.headers.common['Authorization'] = 'confidential';
 
@@ -25,7 +12,8 @@ const initiaPostState = {
 	id: undefined,
 	timestamp: undefined,
 	title: undefined,
-	voteScore: undefined	
+	voteScore: undefined,
+	ncomments: undefined	
 }
 
 export function fetchPost(id) {
@@ -102,6 +90,7 @@ export function fetchComments(id) {
 		axios.get(`http://localhost:3001/posts/${id}/comments`)
 			.then(res => dispatch({
 				type: FETCH_COMMENTS,
+				parentId: id,
 				data: orderBy(res.data, 'VD')
 			}))
 	}
@@ -191,9 +180,22 @@ export function fetchCategories () {
 		}))
 	}
 }
+export function fetchNComments(id) {
+	
+	return dispatch => {
+		axios.get(`http://localhost:3001/posts/${id}/comments`)
+			.then(res => dispatch({
+				type: FETCH_NCOMMENTS,
+				idParent: id,
+				data: res.data.length
+			}))
+	}
+	
+}
 
 
 export function fetchPosts (order) {
+
 	return dispatch => {
 		axios('http://localhost:3001/posts')
 			.then(res => dispatch({	// Thunk async call trick
@@ -204,7 +206,7 @@ export function fetchPosts (order) {
 }
 
 function orderBy(data, orderBy, filter){
-
+	
 	return data.sort((a,b) => {
 		switch (orderBy){
 			case 'VA':

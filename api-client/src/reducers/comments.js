@@ -1,5 +1,4 @@
-import { FETCH_COMMENTS, CREATE_COMMENT, DELETE_COMMENT, VOTE_COMMENT } from '../actions'
-
+import { FETCH_COMMENTS, CREATE_COMMENT, DELETE_COMMENT, VOTE_COMMENT } from '../actions/type'
 const initialCategoriesState = null
 
 export default function categories (state = initialCategoriesState, action) {

@@ -1,4 +1,4 @@
-import { FETCH_POST, EDIT_POST, DELETE_POST, VOTE_POST } from '../actions'
+import { FETCH_POST, EDIT_POST, DELETE_POST, VOTE_POST } from '../actions/type'
 
 const initialCategoriesState = {
 	author: undefined,
@@ -17,11 +17,8 @@ export default function post (state = initialCategoriesState, action) {
 		case FETCH_POST:
 			return action.data
 		case EDIT_POST:
-			return state
 		case DELETE_POST:
-			return state
 		case VOTE_POST:
-			return state
 		default :
 			return state
 	}

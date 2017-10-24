@@ -15,7 +15,7 @@ class NavBar extends Component {
 						</li>
 						{categories && categories.map((category) => (
 							<li key={category.name} className="nav-item active">
-								<a className="nav-link" onClick={() => this.props.selectCategory(category.name.toUpperCase())}> {category.name.toUpperCase()}</a>
+								<a className="nav-link" onClick={() => {this.props.selectCategory(category.name.toUpperCase());this.props.history.push('/' + category.name.toUpperCase())}}> {category.name.toUpperCase()}</a>
 							</li>					
 						))}
 					</ul>

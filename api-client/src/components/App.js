@@ -22,9 +22,10 @@ class App extends Component {
 				<div className="container">
 					<Switch>
 						<Route path="/" exact component={Main} />
-						<Route path="/posts/new" exact component={Post} />
 						<Route path="/view/post" exact component={View} />
 						<Route path="/comments/new" exact component={Comment} />
+						<Route path="/:category" exact component={Main} />
+						<Route path="/:category/:post_id" exact component={Post} />
 					</Switch>
 				</div>
 			</BrowserRouter>

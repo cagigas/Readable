@@ -23,6 +23,7 @@ class View extends Component {
 							: <span className="badge badge-danger">{post.voteScore}</span>
 						}
 						&nbsp;<i onClick={() => {this.props.votePost(post.id, 'downVote', () => {this.props.fetchPost(post.id)})}} className="material-icons">thumb_down</i>
+						<p>Comments: ({comments && comments.length})</p>
 						<div className="space-up">
 							<a onClick={() => {this.props.fetchPost(post.id); this.props.history.push('/posts/new')}} className="card-link">Edit Post</a>
 							<a onClick={() => {this.props.deletePost(post.id, () => {this.props.fetchPosts('VA');this.props.history.push('/')}) }} className="card-link">Delete Post</a> {/*if you write href restart redux store*/}

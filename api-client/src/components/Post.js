@@ -2,9 +2,14 @@ import React, { Component } from 'react'
 import { createPost, editPost } from '../actions'
 import { connect } from 'react-redux'
 import serializeForm from 'form-serialize'
+import { fetchPost, fetchNComments } from '../actions'
 
 class Post extends Component {
-	
+	componentWillMount(){
+		this.props.fetchPost(this.props.match.params.post_id)
+		this.props.fetchNComments(this.props.match.params.post_id)
+
+	}
 	handleSubmit = (e) => {
 		e.preventDefault()
 		const values = serializeForm(e.target, { hash: true })
@@ -18,7 +23,6 @@ class Post extends Component {
 		
 	render() {
 		const { categories, post } = this.props.store
-		console.log(post)
 		return (
 		<div className="card">
 			<div className="card-header">
@@ -46,10 +50,11 @@ class Post extends Component {
 						<label htmlFor="exampleInputCategory">Category</label>
 						<select name="category" className="form-control" id="exampleInputCategory">
 							{categories && categories.map((category) => (
-								<option key={category}>{category.name.toUpperCase()}</option>
+								<option key={category.name}>{category.name.toUpperCase()}</option>
 							))}
 						</select>
 					</div>
+					<p>Comments({this.props.store.comment})</p>
 					<button type="submit" className="btn btn-primary">Submit</button>
 					<button type="submit" onClick={() => this.props.history.push('/')} className="btn btn-secondary">Cancel</button>
 				</form>
@@ -68,7 +73,10 @@ function mapStateToProps(store){
 function mapDispatchToProps(dispatch){
 	return{
 		createPost: (data) => dispatch(createPost(data)),
-		editPost: (data) => dispatch(editPost(data))
+		editPost: (data) => dispatch(editPost(data)),
+		fetchPost: (data) => dispatch(fetchPost(data)),
+		fetchNComments: (data) => dispatch(fetchNComments(data))
+
 	}
 }
 
