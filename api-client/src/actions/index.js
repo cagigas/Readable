@@ -17,7 +17,8 @@ const initiaPostState = {
 }
 
 export function fetchPost(id) {
-	if(id){	        
+
+	if(id !== 'null'){	        
 		return dispatch => {
 			axios.get(`http://localhost:3001/posts/${id}`)
 				.then(res => dispatch({
@@ -27,14 +28,18 @@ export function fetchPost(id) {
 		}
 	}else return {type: FETCH_POST, data: initiaPostState} 
 }
+
 export function fetchComment(id) {
-	if(id){	        
+		console.log(id !== 'null')    
+	if(id !== 'null'){	    
 		return dispatch => {
 			axios.get(`http://localhost:3001/comments/${id}`)
-				.then(res => dispatch({
-					type: FETCH_COMMENT,
-					data: res.data
-				}))
+				.then(res => {
+					//callback()
+					dispatch({
+						type: FETCH_COMMENT,
+						data: res.data
+				})})
 		}
 	}else return {type: FETCH_COMMENT, data: null} 
 }
@@ -45,7 +50,7 @@ export function voteComment(id, vote, callback) {
             .then(res => {
 				callback()
 				dispatch({
-					type: VOTE_POST,
+					type: VOTE_COMMENT,
 					data: res.data
 		})})
     }
@@ -85,7 +90,7 @@ export function createComment({ author, body }, parentId) {
     }
 }
 export function fetchComments(id) {
-	
+
 	return dispatch => {
 		axios.get(`http://localhost:3001/posts/${id}/comments`)
 			.then(res => dispatch({

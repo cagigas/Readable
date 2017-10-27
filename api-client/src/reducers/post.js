@@ -12,6 +12,7 @@ const initialCategoriesState = {
 }
 
 export default function post (state = initialCategoriesState, action) {
+
 	if(!action.data) return state //In case id was wrong or null
 	switch (action.type) {
 		case FETCH_POST:

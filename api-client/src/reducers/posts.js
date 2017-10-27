@@ -12,6 +12,7 @@ export default function posts (state = initialPostsState, action) {
 		state.map((post)=>{
 			if(post.id === action.idParent)
 				post.ncomments = action.data
+			return post
 		})
 		return state
     default :

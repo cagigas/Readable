@@ -1,20 +1,29 @@
 import React, { Component } from 'react'
-import { fetchPosts, fetchPost, votePost, deletePost, fetchComments, fetchComment, voteComment, deleteComment } from '../actions'
+import  * as actions from '../actions'
 import { connect } from 'react-redux'
+import Menu from './Menu'
 
 class View extends Component {
 
+	componentWillMount(){
+		this.props.fetchPost(this.props.match.params.post_id)
+		this.props.fetchComments(this.props.match.params.post_id);
+	}
+
 	render() {
-		const { post, comments } = this.props.store
-		
+		const { post, comments } = this.props
+
 		return (
 			<div>
+				<Menu 
+					match={this.props.match}
+					history={this.props.history}/>
 				<div className="card">
 					<div className="card-header">
 					Post View
 					</div>
 					<div className="card-body">
-						<h4 className="card-title" onClick={() => {this.props.fetchPost(post.id);this.props.history.push('/view/post')}}>{post.title}<span className="badge badge-secondary">{new Date(post.timestamp).toLocaleDateString("en-US")}</span></h4>
+						<h4 className="card-title" onClick={() => {this.props.fetchPost(post.id);this.props.history.push('/'+post.category.toUpperCase()+'/'+post.id)}}>{post.title}<span className="badge badge-secondary">{new Date(post.timestamp).toLocaleDateString("en-US")}</span></h4>
 						<h6 className="card-subtitle mb-2 text-muted">{post.author}</h6>
 						<p className="card-text">{post.body}</p>
 						<i onClick={() => {this.props.votePost(post.id, 'upVote', () => {this.props.fetchPost(post.id)})}} className="material-icons">thumb_up</i>&nbsp;
@@ -25,7 +34,7 @@ class View extends Component {
 						&nbsp;<i onClick={() => {this.props.votePost(post.id, 'downVote', () => {this.props.fetchPost(post.id)})}} className="material-icons">thumb_down</i>
 						<p>Comments: ({comments && comments.length})</p>
 						<div className="space-up">
-							<a onClick={() => {this.props.fetchPost(post.id); this.props.history.push('/posts/new')}} className="card-link">Edit Post</a>
+							<a onClick={() => {this.props.fetchPost(post.id); this.props.history.push('/'+post.category.toUpperCase()+'/edit/'+post.id)}} className="card-link">Edit Post</a>
 							<a onClick={() => {this.props.deletePost(post.id, () => {this.props.fetchPosts('VA');this.props.history.push('/')}) }} className="card-link">Delete Post</a> {/*if you write href restart redux store*/}
 						</div>
 					</div>
@@ -48,36 +57,21 @@ class View extends Component {
 								}
 								&nbsp;<i onClick={() => {this.props.voteComment(comment.id, 'downVote', () => {this.props.fetchComments(comment.parentId)})}} className="material-icons">thumb_down</i>
 								<div className="space-up">
-									<a className="card-link" onClick={() => {this.props.fetchComment(comment.id);this.props.history.push('/comments/new')}}>Edit Comment</a>
+									<a className="card-link" onClick={() => {this.props.history.push('/' + post.category + '/' + post.id + '/edit/' + comment.id)}}>Edit Comment</a>
 									<a className="card-link" onClick={() => {this.props.deleteComment(comment.id, () => {this.props.fetchComments(comment.parentId)}) }}>Delete Comment</a> {/*if you write href restart redux store*/}
 								</div>
 							  </div>
 						))}
 					</div>
 				</div>
-			<button type="button" onClick={() => {this.props.fetchComment(null); this.props.history.push('/comments/new')}} className="btn btn-primary btn-lg btn-block" >New Comment</button>	
+			<button type="button" onClick={() => {this.props.history.push('/' + post.category + '/' + post.id + '/edit/null')}} className="btn btn-primary btn-lg btn-block" >New Comment</button>	
 			</div>
 		)
 	}
 }
 
-function mapStateToProps(store){
-	return{
-		store
-	}
+function mapStateToProps({ post, comments }){
+	return { post, comments }
 }
 
-function mapDispatchToProps(dispatch){
-	return{
-		fetchPosts: (data) => dispatch(fetchPosts(data)),
-		fetchPost: (data) => dispatch(fetchPost(data)),
-		fetchComment: (data) => dispatch(fetchComment(data)),
-		votePost: (data, vote, callback) => dispatch(votePost(data, vote, callback)),
-		deleteComment: (data, callback) => dispatch(deleteComment(data, callback)),
-		voteComment: (data, vote, callback) => dispatch(voteComment(data, vote, callback)),
-		deletePost: (data, callback) => dispatch(deletePost(data, callback)),
-		fetchComments: (data) => dispatch(fetchComments(data)),
-	}
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(View)
+export default connect(mapStateToProps, actions)(View)

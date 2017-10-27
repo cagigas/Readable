@@ -3,30 +3,27 @@ import { fetchPosts, fetchPost } from '../actions'
 import { connect } from 'react-redux'
 import NavBar from './NavBar'
 import PostMain from './PostMain'
+import Menu from './Menu'
 
 class Main extends Component {
-	
-	state = {
-		category: 'NONE'
-	}
-	
-	componentWillMount(){
-		this.props.fetchPosts('VA')
-		this.setState({category: this.props.match.params.category ? this.props.match.params.category.toUpperCase() : 'NONE'})
-	}
 		
-	selectCategory = (category) => {
-		this.setState({category: category})
+	componentWillMount(){
+		if(!this.props.match.params.category){
+			this.props.history.push('/NONE')
+		}
+		this.props.fetchPosts('VA')
 	}
 	
 	render() {
-		const { posts } = this.props.store
+		const { posts } = this.props
 
 		return (
 			<div>
+				<Menu 
+					match={this.props.match}
+					history={this.props.history}/>
 				<NavBar 
 					history={this.props.history}
-					selectCategory={this.selectCategory}
 					/>
 				<div className="dropdown">
 				  <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -41,7 +38,7 @@ class Main extends Component {
 				</div>
 
 				{posts && posts
-					.filter((post) => this.state.category === "NONE" ? post : post.category.toUpperCase() === this.state.category)
+					.filter((post) => this.props.match.params.category === 'NONE' ? post : post.category.toUpperCase() === this.props.match.params.category)
 					.map((post) => (
 						<PostMain 
 							history={this.props.history}
@@ -49,23 +46,13 @@ class Main extends Component {
 							post={post}
 						/>
 				))}
-					<button type="button" onClick={() => {this.props.fetchPost(null); this.props.history.push('/posts/new')}} className="btn btn-primary btn-lg btn-block" >New Post</button>	
+				<button type="button" onClick={() => {this.props.history.push('/' + this.props.post.category + '/edit/null')}} className="btn btn-primary btn-lg btn-block" >New Post</button>	
 			</div>
 		)
 	}
 }
 
-function mapStateToProps(store){
-	return{
-		store
-	}
+function mapStateToProps({ posts, post }){
+	return { posts, post }
 }
-
-function mapDispatchToProps(dispatch){
-	return{
-		fetchPosts: (data) => dispatch(fetchPosts(data)),
-		fetchPost: (data) => dispatch(fetchPost(data)),
-	}
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Main)
+export default connect(mapStateToProps, { fetchPosts, fetchPost })(Main)
